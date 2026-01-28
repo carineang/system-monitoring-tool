@@ -10,6 +10,19 @@ check_cpu_usage() {
     echo "$cpu_usage"
 }
 
+# Check memory usage
+check_memory_usage() {
+    mem_info=$(free | grep Mem)
+    total_mem=$(echo "$mem_info" | awk '{print $2}')
+    used_mem=$(echo "$mem_info" | awk '{print $3}')
+    mem_usage=$(( (used_mem * 100) / total_mem ))
+    echo "$mem_usage"
+}
+
 log_message "Checking CPU usage..."
-CPU_USAGE=$(get_cpu_usage)
+CPU_USAGE=$(check_cpu_usage)
 echo "CPU Usage: ${CPU_USAGE}%"
+
+log_message "Checking memory usage..."
+MEMORY_USAGE=$(check_memory_usage)
+echo "Memory Usage: ${MEMORY_USAGE}%"
