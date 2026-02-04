@@ -62,10 +62,28 @@ def get_memory_info():
         print(f"Error getting memory info: {e}")
         return {'total_gb': 0, 'available_gb': 0, 'used_gb': 0, 'percent': 0}
 
+def get_disk_info(path="/"):
+    try:
+        disk = psutil.disk_usage(path)
+        
+        # Convert bytes to GB
+        def bytes_to_gb(bytes_value):
+            return bytes_value / (1024 ** 3)
+        
+        return {
+            'total_gb': bytes_to_gb(disk.total),
+            'used_gb': bytes_to_gb(disk.used),
+            'free_gb': bytes_to_gb(disk.free),
+            'percent': disk.percent
+        }
+    except Exception as e:
+        print(f"Error getting disk info: {e}")
+        return {'total_gb': 0, 'used_gb': 0, 'free_gb': 0, 'percent': 0}
+
 
 if __name__ == "__main__":
     config = load_config()
-    print("=== Testing CPU Monitoring ===")
+    print("\n=== Testing CPU Monitoring ===")
     cpu_info = get_cpu_info()
     print(f"CPU Usage: {cpu_info['percent']}%")
     print(f"CPU Cores: {cpu_info['count']}")
@@ -78,7 +96,7 @@ if __name__ == "__main__":
     else:
         print("OK: CPU within normal range.")
 
-    print("=== Testing Memory Monitoring ===")
+    print("\n=== Testing Memory Monitoring ===")
     memory_info = get_memory_info()
     print(f"Memory Usage: {memory_info['percent']}%")
     print(f"Used: {memory_info['used_gb']:.2f} GB / {memory_info['total_gb']:.2f} GB")
@@ -88,3 +106,15 @@ if __name__ == "__main__":
         print("ALERT: Memory threshold exceeded!")
     else:
         print("OK: Memory within normal range.")
+
+    print("\n=== Testing Disk Monitoring ===")
+    disk_info = get_disk_info("/")
+    print(f"Disk Usage: {disk_info['percent']}%")
+    print(f"Used: {disk_info['used_gb']:.2f} GB / {disk_info['total_gb']:.2f} GB")
+    print(f"Free: {disk_info['free_gb']:.2f} GB")
+    
+    # Check disk threshold
+    if disk_info['percent'] > config['thresholds']['disk']:
+        print("ALERT: Disk threshold exceeded!")
+    else:
+        print("OK: Disk within normal range.")
