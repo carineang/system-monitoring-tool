@@ -1,0 +1,6 @@
+# Resource usage thresholds
+thresholds:
+  cpu: 80
+  memory: 80
+  disk: 80
+  load: 1.2
