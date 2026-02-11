@@ -49,7 +49,7 @@ main() {
             echo ""
             echo "Commands:"
             echo "  start     Start monitoring"
-            echo "  help    Show this help"
+            echo "  help    Show help"
             ;;
         *)
             print_error "Unknown command: $1"
@@ -58,7 +58,7 @@ main() {
             echo ""
             echo "Commands:"
             echo "  start   Start monitoring"
-            echo "  help    Show this help"
+            echo "  help    Show help"
             exit 1
             ;;
     esac
