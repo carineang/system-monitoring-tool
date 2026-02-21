@@ -5,6 +5,7 @@ import sys
 import json
 import yaml
 import psutil
+import argparse
 
 def load_config(config_file="config.yaml"):
     print(f"Loading config from: {config_file}")
@@ -80,41 +81,53 @@ def get_disk_info(path="/"):
         print(f"Error getting disk info: {e}")
         return {'total_gb': 0, 'used_gb': 0, 'free_gb': 0, 'percent': 0}
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False, usage="python3 system-monitor.py [--start]")
+    parser.add_argument("--start", action="store_true", help="Start system monitoring")
+    return parser
+
 
 if __name__ == "__main__":
-    config = load_config()
-    print("\n=== Testing CPU Monitoring ===")
-    cpu_info = get_cpu_info()
-    print(f"CPU Usage: {cpu_info['percent']}%")
-    print(f"CPU Cores: {cpu_info['count']}")
-    if cpu_info['frequency']:
-        print(f"CPU Frequency: {cpu_info['frequency']} MHz")
-    
-    # Check cpu threshold
-    if cpu_info['percent'] > config['thresholds']['cpu']:
-        print("ALERT: CPU threshold exceeded!")
-    else:
-        print("OK: CPU within normal range.")
+    parser = parse_arguments()
+    args = parser.parse_args()
 
-    print("\n=== Testing Memory Monitoring ===")
-    memory_info = get_memory_info()
-    print(f"Memory Usage: {memory_info['percent']}%")
-    print(f"Used: {memory_info['used_gb']:.2f} GB / {memory_info['total_gb']:.2f} GB")
-    
-    # Check memory threshold
-    if memory_info['percent'] > config['thresholds']['memory']:
-        print("ALERT: Memory threshold exceeded!")
-    else:
-        print("OK: Memory within normal range.")
+    if args.start:
+        config = load_config()
+        print("\n=== Start CPU Monitoring ===")
+        cpu_info = get_cpu_info()
+        print(f"CPU Usage: {cpu_info['percent']}%")
+        print(f"CPU Cores: {cpu_info['count']}")
+        if cpu_info.get('frequency'):
+            print(f"CPU Frequency: {cpu_info['frequency']} MHz")
 
-    print("\n=== Testing Disk Monitoring ===")
-    disk_info = get_disk_info("/")
-    print(f"Disk Usage: {disk_info['percent']}%")
-    print(f"Used: {disk_info['used_gb']:.2f} GB / {disk_info['total_gb']:.2f} GB")
-    print(f"Free: {disk_info['free_gb']:.2f} GB")
-    
-    # Check disk threshold
-    if disk_info['percent'] > config['thresholds']['disk']:
-        print("ALERT: Disk threshold exceeded!")
+        # Check cpu threshold
+        if cpu_info['percent'] > config['thresholds']['cpu']:
+            print("ALERT: CPU threshold exceeded!")
+        else:
+            print("OK: CPU within normal range.")
+
+        print("\n=== Start Memory Monitoring ===")
+        memory_info = get_memory_info()
+        print(f"Memory Usage: {memory_info['percent']}%")
+        print(f"Used: {memory_info['used_gb']:.2f} GB / {memory_info['total_gb']:.2f} GB")
+
+        # Check memory threshold
+        if memory_info['percent'] > config['thresholds']['memory']:
+            print("ALERT: Memory threshold exceeded!")
+        else:
+            print("OK: Memory within normal range.")
+
+        print("\n=== Start Disk Monitoring ===")
+        disk_info = get_disk_info("/")
+        print(f"Disk Usage: {disk_info['percent']}%")
+        print(f"Used: {disk_info['used_gb']:.2f} GB / {disk_info['total_gb']:.2f} GB")
+        print(f"Free: {disk_info['free_gb']:.2f} GB")
+
+        # Check disk threshold
+        if disk_info['percent'] > config['thresholds']['disk']:
+            print("ALERT: Disk threshold exceeded!")
+        else:
+            print("OK: Disk within normal range.")
+
     else:
-        print("OK: Disk within normal range.")
+        parser.print_help()

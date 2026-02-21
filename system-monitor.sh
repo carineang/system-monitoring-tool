@@ -37,31 +37,7 @@ check_python() {
 
 main() {
     check_python
-
-    case "${1:-}" in
-        "start")
-            print_info "Starting system monitor..."
-            python3 system-monitor.py
-            ;;
-        "help")
-            echo ""
-            echo "Usage: $0 {start|help}"
-            echo ""
-            echo "Commands:"
-            echo "  start     Start monitoring"
-            echo "  help    Show help"
-            ;;
-        *)
-            print_error "Unknown command: $1"
-            echo ""
-            echo "Usage: $0 {start|help}"
-            echo ""
-            echo "Commands:"
-            echo "  start   Start monitoring"
-            echo "  help    Show help"
-            exit 1
-            ;;
-    esac
+    python3 system-monitor.py --start
 }
 
 main "$@"
