@@ -37,7 +37,7 @@ check_python() {
 
 main() {
     check_python
-    python3 system-monitor.py --start
+    python3 system-monitor.py --daemon
 }
 
 main "$@"
