@@ -1,6 +1,6 @@
-## Linux System Monitoring Tool
+# Linux System Monitoring Tool
 
-A lightweight **Python-based Linux system monitoring tool** that tracks CPU, memory, and disk usage, with thresholds-based alerts and real-time logging.
+A lightweight Python-based Linux system monitoring tool that tracks CPU, memory, and disk usage, with thresholds-based alerts and real-time logging.
 
 
 ## Features
