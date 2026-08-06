@@ -16,7 +16,7 @@ A lightweight Python-based Linux system monitoring tool that monitors CPU, memor
 
 ```
 ├── system-monitor.py      # Main Python monitoring script
-├── system-monitor.sh      # Bash launcher
+├── system-monitor.sh      # Bash launcher (Daemon mode)
 ├── config.yaml            # Configuration file
 ├── requirements.txt       # Python dependencies
 ├── Dockerfile             # Docker image definition
@@ -46,7 +46,7 @@ A lightweight Python-based Linux system monitoring tool that monitors CPU, memor
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/carineang/system-monitoring-tool/
 cd system-monitoring-tool
 ```
 
@@ -104,7 +104,6 @@ Or use the Bash launcher.
 
 ```bash
 chmod +x system-monitor.sh
-
 ./system-monitor.sh
 ```
 
