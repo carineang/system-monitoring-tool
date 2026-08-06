@@ -1,7 +1,6 @@
 # Linux System Monitoring Tool
 
-A lightweight Python-based Linux system monitoring tool that tracks CPU, memory, and disk usage, with thresholds-based alerts and real-time logging.
-
+A lightweight Python-based Linux system monitoring tool that monitors CPU, memory, and disk usage, supports configurable threshold-based alerts, and provides real-time logging. The application can be run directly with Python or deployed in a Docker container for consistent and portable execution.
 
 ## Features
 
@@ -11,40 +10,55 @@ A lightweight Python-based Linux system monitoring tool that tracks CPU, memory,
 | **Multiple Modes** | One-time check or continuous monitoring |
 | **Threshold-based Alerts** | Get notified when resources exceed limits |
 | **Logging** | Real-time logs for one-time and daemon modes |
-
+| **Docker Support** | Containerized deployment using Docker and Docker Compose |
 
 ## Project Structure
 
 ```
-.
 ├── system-monitor.py      # Main Python monitoring script
-├── system-monitor.sh      # Bash launcher (daemon mode)
+├── system-monitor.sh      # Bash launcher
 ├── config.yaml            # Configuration file
-├── requirements.txt       # Required dependencies
+├── requirements.txt       # Python dependencies
+├── Dockerfile             # Docker image definition
+├── docker-compose.yml     # Docker Compose configuration
+├── .dockerignore          # Docker ignore rules
 ├── logs/                  # Log directory (auto-generated)
 │   ├── monitor.log
 │   └── alerts.log
 └── README.md
-```
 
+```
 
 ## Requirements
 
-- Python 3.11+
-- psutil
-- PyYAML
+### Running Locally
 
+* Python 3.11+
+* pip
 
-## Install Dependencies
+### Running with Docker
+
+* Docker Desktop (Windows/macOS)
+* Docker Engine + Docker Compose (Linux)
+
+## Installation
+
+Clone the repository:
 
 ```bash
-pip install requirements.txt
+git clone <repository-url>
+cd system-monitoring-tool
 ```
 
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Configuration
 
-Edit `config.yaml` to customize thresholds and monitoring behavior:
+Customize monitoring behavior by editing `config.yaml`.
 
 ```yaml
 thresholds:
@@ -68,54 +82,86 @@ monitoring:
 - `interval` – Time in seconds between checks (daemon mode)
 - `log_level` – Logging level (`DEBUG`, `INFO`, `WARNING`, `ERROR`)
 
-
 ## Usage
 
-### 1. One-Time System Check
+### One-Time System Check
 
-Runs a one-time system resource check.
+Run a single system resource check.
 
 ```bash
 python3 system-monitor.py --check
 ```
 
-### 2. Continuous Monitoring (Daemon Mode)
+## Continuous Monitoring
 
-Runs continuously at configured interval.
+Run continuous monitoring using Python.
 
 ```bash
 python3 system-monitor.py --daemon
 ```
 
-Or use the bash launcher:
+Or use the Bash launcher.
 
 ```bash
 chmod +x system-monitor.sh
+
 ./system-monitor.sh
 ```
 
-Stop with:
+Stop monitoring with:
 
-```
+```text
 Ctrl + C
 ```
 
+## Docker Deployment
+
+### Build the Docker Image
+
+```bash
+docker build -t system-monitor .
+```
+
+### Docker Compose
+
+Start the application:
+
+```bash
+docker compose up -d
+```
+
+View logs:
+
+```bash
+docker compose logs -f
+```
+
+Stop the application:
+
+```bash
+docker compose down
+```
+
+Rebuild after code changes:
+
+```bash
+docker compose up --build -d
+```
 
 ## Alerts
 
 When a threshold is exceeded:
 
-- A red alert message is printed to the console
-- A warning is logged in:
-  - `logs/monitor.log`
-  - `logs/alerts.log`
+* An alert is printed to the console.
+* A warning entry is written to:
+  * `logs/monitor.log`
+  * `logs/alerts.log`
 
-Example alert message:
+Example:
 
-```
+```text
 ALERT [CPU]: CPU usage 92% > 80%
 ```
-
 
 ## Logging
 
@@ -124,8 +170,15 @@ Logs are stored in the `logs/` directory (auto-generated):
 - `alerts.log`: Alert-specific entries
 - `monitor.log`: General monitoring logs
 
-Example log entry:
-
-```
+Example:
+```text
 2026-03-12 09:56:52 - INFO - CPU: 28.3%
 ```
+
+## Technologies Used
+
+* Python 3.11
+* psutil
+* PyYAML
+* Docker
+* Docker Compose
