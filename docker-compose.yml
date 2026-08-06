@@ -1,0 +1,12 @@
+services:
+  system-monitor:
+    build: .
+    container_name: system-monitor
+
+    volumes:
+      - ./logs:/app/logs
+      - ./config.yaml:/app/config.yaml
+
+    restart: unless-stopped
+
+    command: ["python3", "system-monitor.py", "--daemon"]
